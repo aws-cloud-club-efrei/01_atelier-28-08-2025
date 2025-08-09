@@ -1,210 +1,264 @@
-# 🚀 Premier Atelier AWS - Club Cloud EFREI
+# Atelier AWS - Cloud Club EFREI
 
-**Date :** 9 juillet 2025  
-**Durée :** 2h30  
-**Niveau :** Débutant
+> **Atelier Cloud Computing** - Démonstrations pratiques des services AWS  
+> **Date de création :** 9 janvier 2025  
+> **Dernière mise à jour :** 10 janvier 2025  
+> **Version :** 2.0.0
 
-## 📋 Objectifs de l'atelier
+Repository contenant les démonstrations et exercices pratiques pour l'atelier AWS du Cloud Club EFREI. Cet atelier couvre l'intégration des services EC2 et S3 à travers une application web complète.
 
-Cet atelier d'introduction vous permettra de :
+## 🎯 Objectif de l'atelier
 
-- Découvrir les concepts fondamentaux du cloud computing
-- Comprendre l'écosystème AWS et ses services principaux
-- Créer votre premier compte AWS et naviguer dans la console
-- Déployer votre première application web sur AWS
-- Appliquer les bonnes pratiques de sécurité de base
+Apprendre à déployer une application web moderne sur AWS en utilisant :
 
-## 🎯 Public cible
+- **Amazon EC2** pour l'hébergement de l'application
+- **Amazon S3** pour le stockage des ressources statiques
+- **Intégration complète** entre les services AWS
 
-- Étudiants EFREI de toutes années
-- Aucune expérience préalable avec AWS requise
-- Connaissances de base en informatique recommandées
+## 📁 Structure du projet
 
-## 📚 Prérequis
+```
+01_atelier-09-07-2025/
+├── 📄 README.md              # Documentation principale
+├── 📁 demo_s3/               # Application Nike Store (Flask + S3)
+│   ├── 🐍 app.py             # Application Flask modulaire
+│   ├── ⚙️ config.py          # Configuration centralisée
+│   ├── 📋 requirements.txt   # Dépendances Python
+│   ├── 🌐 templates/         # Templates HTML (Nike Store)
+│   ├── 🔧 services/          # Services métier (S3, produits)
+│   ├── 🛣️ routes/            # Routes Flask (API + vues)
+│   ├── 🛠️ utils/             # Utilitaires et validateurs
+│   └── 📖 README.md          # Documentation de l'application
+├── 📁 demo_ec2/              # Scripts de déploiement EC2
+│   ├── 🔧 01-configure-instance.sh  # Configuration interactive
+│   ├── 📦 02-deploy-app.sh          # Déploiement automatisé
+│   ├── 🛠️ 03-manage-instance.sh     # Gestion de l'application
+│   └── 📖 README.md                 # Guide de déploiement
+└── 📁 demo_lambda/           # Démonstrations Lambda (à venir)
+```
 
-### Matériel nécessaire
+## 🏪 Demo S3 - Nike Store Application
 
-- Ordinateur portable avec connexion internet
-- Navigateur web moderne (Chrome, Firefox, Safari)
-- Adresse email valide
-- Carte bancaire (pour la vérification d'identité AWS - aucun frais)
+### 📋 Description
 
-### Connaissances recommandées
+Application web moderne simulant un site e-commerce Nike avec :
 
-- Notions de base en réseaux
-- Familiarité avec les interfaces web
-- Concepts de base des systèmes d'exploitation
+- **Interface utilisateur** : Design Nike authentique avec TailwindCSS
+- **Catalogue produits** : 3 baskets iconiques (Air Force 1, Air Jordan 4, Nike Muse)
+- **Intégration S3** : Images stockées et servies depuis Amazon S3
+- **Interface d'administration** : Gestion des images S3 avec upload/suppression
+- **Architecture modulaire** : Code Python organisé en services et routes
 
-## 🗓️ Programme de l'atelier
+### 🚀 Fonctionnalités
 
-### Partie 1 : Introduction au Cloud Computing (30 min)
+- ✅ **Affichage dynamique** des produits avec images S3
+- ✅ **Interface d'administration** pour gérer les images
+- ✅ **Upload/Suppression** d'images vers/depuis S3
+- ✅ **Gestion d'erreurs** avec diagnostic des permissions
+- ✅ **Design responsive** optimisé mobile/desktop
+- ✅ **API REST** pour l'intégration
 
-- **Qu'est-ce que le cloud computing ?**
+### 🛠️ Technologies utilisées
 
-  - Définition et avantages
-  - Modèles de service : IaaS, PaaS, SaaS
-  - Modèles de déploiement : Public, Privé, Hybride
+- **Backend** : Python 3.9+, Flask 2.3+
+- **AWS SDK** : Boto3 pour l'intégration S3
+- **Frontend** : HTML5, TailwindCSS, JavaScript ES6
+- **Configuration** : python-dotenv pour les variables d'environnement
 
-- **Présentation d'Amazon Web Services**
-  - Histoire et position sur le marché
-  - Régions et zones de disponibilité
-  - Vue d'ensemble des services principaux
+## 🖥️ Demo EC2 - Déploiement automatisé
 
-### Partie 2 : Création du compte AWS (20 min)
+### 📋 Description
 
-- **Configuration du compte**
+Scripts Bash pour automatiser le déploiement de l'application Nike Store sur une instance EC2 :
 
-  - Inscription et vérification
-  - Configuration de la facturation
-  - Activation du niveau gratuit (Free Tier)
+- **Configuration interactive** des informations d'instance
+- **Déploiement automatisé** avec gestion des dépendances
+- **Gestion complète** de l'application en production
 
-- **Sécurité de base**
-  - Configuration de l'authentification multi-facteurs (MFA)
-  - Création d'un utilisateur IAM
-  - Bonnes pratiques de sécurité
+### 🚀 Fonctionnalités
 
-### Partie 3 : Navigation dans la console AWS (30 min)
+- ✅ **Configuration guidée** des paramètres d'instance
+- ✅ **Déploiement en un clic** avec vérifications automatiques
+- ✅ **Gestion d'application** (start, stop, restart, logs)
+- ✅ **Diagnostic système** et monitoring
+- ✅ **Support multi-OS** (Amazon Linux, Ubuntu)
+- ✅ **Sécurisation SSH** et gestion des permissions
 
-- **Interface de la console**
+### 🛠️ Technologies utilisées
 
-  - Navigation principale
-  - Recherche de services
-  - Gestion des régions
+- **Scripts** : Bash 4.0+
+- **Déploiement** : SSH, SCP
+- **Monitoring** : Logs système et application
+- **Packaging** : ZIP pour le transfert d'application
 
-- **Services essentiels à connaître**
-  - EC2 (Elastic Compute Cloud)
-  - S3 (Simple Storage Service)
-  - RDS (Relational Database Service)
-  - Lambda (Serverless Computing)
+## 🎓 Parcours d'apprentissage
 
-### Partie 4 : Projet pratique - Hébergement d'un site web (60 min)
+### Étape 1 : Développement local (demo_s3)
 
-- **Création d'un bucket S3**
+```bash
+cd demo_s3
+pip install -r requirements.txt
+# Configurer le .env avec vos clés AWS
+python app.py
+# Accéder à http://localhost:3000
+```
 
-  - Configuration pour l'hébergement web statique
-  - Upload des fichiers HTML/CSS
-  - Configuration des permissions
+### Étape 2 : Déploiement sur EC2 (demo_ec2)
 
-- **Déploiement et test**
-  - Activation de l'hébergement web
-  - Test de l'accès public
-  - Personnalisation du site
+```bash
+cd demo_ec2
+chmod +x *.sh
+./01-configure-instance.sh  # Configuration
+./02-deploy-app.sh          # Déploiement
+./03-manage-instance.sh     # Gestion
+```
 
-### Partie 5 : Monitoring et nettoyage (20 min)
+### Étape 3 : Configuration S3
 
-- **Surveillance des coûts**
+1. **Créer un bucket S3** : `e-commerce-bucket-acc-efrei`
+2. **Uploader les images** : `af1.png`, `aj4.png`, `muse.png`
+3. **Configurer les permissions** S3 appropriées
+4. **Tester l'intégration** via l'interface d'administration
 
-  - Configuration des alertes de facturation
-  - Utilisation du Cost Explorer
+## 📚 Concepts AWS abordés
 
-- **Nettoyage des ressources**
-  - Suppression des ressources créées
-  - Vérification de l'arrêt des services
+### 🖥️ Amazon EC2
 
-## 🛠️ Ressources et outils
+- **Instances** : Création, configuration, gestion
+- **Groupes de sécurité** : Règles de pare-feu
+- **Clés SSH** : Authentification sécurisée
+- **Déploiement d'applications** : Bonnes pratiques
 
-### Documentation officielle
+### 📦 Amazon S3
 
-- [AWS Documentation](https://docs.aws.amazon.com/)
-- [AWS Free Tier](https://aws.amazon.com/free/)
-- [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
+- **Buckets** : Création et configuration
+- **Objets** : Upload, téléchargement, suppression
+- **Permissions** : Politiques IAM et bucket policies
+- **Intégration applicative** : SDK Boto3
 
-### Outils utiles
+### � Sécurité AWS
 
-- [AWS CLI](https://aws.amazon.com/cli/) - Interface en ligne de commande
-- [AWS SDK](https://aws.amazon.com/tools/) - Kits de développement
-- [AWS CloudShell](https://aws.amazon.com/cloudshell/) - Terminal dans le navigateur
+- **Variables d'environnement** : Gestion sécurisée des clés
+- **Permissions granulaires** : Principe du moindre privilège
+- **Diagnostic d'erreurs** : Explicit Deny vs Allow
 
-### Formations complémentaires
+## 🛠️ Prérequis techniques
 
-- [AWS Educate](https://aws.amazon.com/education/awseducate/) - Programme éducatif gratuit
-- [AWS Training and Certification](https://aws.amazon.com/training/)
-- [AWS Hands-on Tutorials](https://aws.amazon.com/getting-started/hands-on/)
+### 💻 Environnement de développement
 
-## 💡 Conseils pour réussir l'atelier
+- **Python** 3.9+ avec pip
+- **Git** pour le versioning
+- **Éditeur de code** (VS Code recommandé)
+- **Terminal** Unix/Linux (WSL2 sur Windows)
 
-1. **Préparez-vous à l'avance**
+### ☁️ Compte AWS
 
-   - Lisez ce README entièrement
-   - Assurez-vous d'avoir tous les prérequis
-   - Préparez vos questions
+- **Compte AWS** actif (Free Tier suffisant)
+- **Clés d'accès** IAM configurées
+- **Permissions** EC2 et S3 requises
 
-2. **Pendant l'atelier**
+### 🔧 Outils système
 
-   - N'hésitez pas à poser des questions
-   - Prenez des notes
-   - Expérimentez avec les services
+- **SSH client** pour la connexion aux instances
+- **curl** pour les tests HTTP
+- **zip/unzip** pour le packaging
 
-3. **Après l'atelier**
-   - Explorez d'autres services AWS
-   - Rejoignez la communauté AWS
-   - Continuez à apprendre avec les ressources fournies
+## 🚀 Démarrage rapide
 
-## ⚠️ Points d'attention
+### 1. Clone du repository
 
-### Sécurité
+```bash
+git clone <repository-url>
+cd 01_atelier-09-07-2025
+```
 
-- **Ne partagez jamais vos clés d'accès AWS**
-- Utilisez toujours l'authentification multi-facteurs
-- Suivez le principe du moindre privilège
-- Surveillez régulièrement votre compte
+### 2. Test en local
 
-### Coûts
+```bash
+cd demo_s3
+pip install -r requirements.txt
+cp .env.example .env
+# Éditer .env avec vos clés AWS
+python app.py
+```
 
-- La plupart des services utilisés sont couverts par le Free Tier
-- Configurez des alertes de facturation
-- Supprimez les ressources non utilisées
-- Vérifiez votre facture régulièrement
+### 3. Déploiement sur EC2
 
-## 📞 Support et contact
+```bash
+# Créer une instance EC2 via la console AWS
+cd ../demo_ec2
+./01-configure-instance.sh
+./02-deploy-app.sh
+```
 
-### Pendant l'atelier
+## 💡 Bonnes pratiques démontrées
 
-- Levez la main pour poser une question
-- Utilisez le chat de l'atelier si disponible
-- Demandez de l'aide à vos voisins
+### 🏗️ Architecture
 
-### Après l'atelier
+- **Séparation des responsabilités** : Services, routes, utilitaires
+- **Configuration externalisée** : Variables d'environnement
+- **Gestion d'erreurs** : Logging et diagnostic
 
-- **Discord du Club Cloud EFREI :** [Lien à ajouter]
-- **Email :** [email@efrei.fr]
-- **Heures de permanence :** [À définir]
+### 🔒 Sécurité
 
-## 🎓 Certifications AWS recommandées
+- **Clés AWS** : Jamais dans le code source
+- **Permissions SSH** : Clés avec permissions 400
+- **Groupes de sécurité** : Ports minimaux ouverts
 
-Pour approfondir vos connaissances :
+### 📊 Monitoring
 
-1. **AWS Certified Cloud Practitioner** (Niveau débutant)
+- **Logs applicatifs** : Suivi des opérations
+- **Métriques système** : CPU, RAM, disque
+- **Tests de connectivité** : Vérifications automatiques
 
-   - Certification d'entrée idéale pour les étudiants
-   - Couvre les concepts fondamentaux du cloud
+## 💰 Estimation des coûts
 
-2. **AWS Certified Solutions Architect - Associate** (Niveau intermédiaire)
-   - Certification technique populaire
-   - Excellente pour les futurs ingénieurs
+### 🆓 Free Tier (12 premiers mois)
 
-## 📝 Évaluation de l'atelier
+- **EC2 t2.micro** : 750h/mois gratuit
+- **S3** : 5 GB gratuit
+- **Transfert** : 15 GB sortant gratuit
 
-Votre feedback est important ! Après l'atelier, vous recevrez :
+### 💳 Coût estimé pour l'atelier
 
-- Un questionnaire d'évaluation
-- Un certificat de participation
-- Les slides de présentation
-- Les liens vers les ressources supplémentaires
+- **Durée** : 4 heures
+- **Instance EC2** : ~0.05€
+- **Stockage S3** : ~0.01€
+- **Total** : **~0.06€**
 
-## 🚀 Prochaines étapes
+## 📞 Support et ressources
 
-Après cet atelier, vous pourrez :
+### 🔗 Documentation officielle
 
-- Participer aux ateliers avancés du club
-- Rejoindre des projets étudiants utilisant AWS
-- Postuler pour des stages dans le domaine du cloud
-- Préparer des certifications AWS
+- [AWS EC2 Documentation](https://docs.aws.amazon.com/ec2/)
+- [AWS S3 Documentation](https://docs.aws.amazon.com/s3/)
+- [Flask Documentation](https://flask.palletsprojects.com/)
+- [Boto3 Documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/)
+
+### 👥 Contact
+
+- **Organisateur** : Cloud Club EFREI
+- **Support technique** : Via les issues GitHub
+- **Documentation** : README.md dans chaque dossier
+
+## ⚠️ Notes importantes
+
+### 🔐 Sécurité
+
+- **Ne jamais commiter** vos clés AWS dans Git
+- **Utiliser des variables d'environnement** pour la configuration
+- **Arrêter les instances EC2** après l'atelier
+
+### 💸 Gestion des coûts
+
+- **Surveiller** votre usage AWS
+- **Supprimer les ressources** après l'atelier
+- **Utiliser AWS Cost Explorer** pour le monitoring
 
 ---
 
-**Organisé par le Club Cloud EFREI**  
-_"Ensemble vers le cloud !"_
+🎓 **Bon atelier et bonne découverte d'AWS !**
 
-![AWS](https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)
-![EFREI](https://img.shields.io/badge/EFREI-0066CC?style=for-the-badge)
+---
+
+_Dernière mise à jour : 10 janvier 2025 - Version 2.0.0_

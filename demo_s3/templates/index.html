@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nike Store - Baskets Iconiques</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "nike-orange": "#FF6900",
+              "nike-black": "#111111",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-white">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center">
+            <div class="text-2xl font-black text-nike-black">NIKE</div>
+          </div>
+          <div class="hidden md:flex space-x-8">
+            <a
+              href="#"
+              class="text-gray-700 hover:text-nike-black font-medium transition-colors"
+              >Nouveautés</a
+            >
+            <a
+              href="#"
+              class="text-gray-700 hover:text-nike-black font-medium transition-colors"
+              >Hommes</a
+            >
+            <a
+              href="#"
+              class="text-gray-700 hover:text-nike-black font-medium transition-colors"
+              >Femmes</a
+            >
+            <a
+              href="#"
+              class="text-gray-700 hover:text-nike-black font-medium transition-colors"
+              >Enfants</a
+            >
+          </div>
+          <div class="flex items-center space-x-4">
+            <a
+              href="/admin"
+              class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-full text-sm transition-colors"
+            >
+              ⚙️ Admin S3
+            </a>
+            <button
+              class="bg-nike-black text-white px-4 py-2 rounded-full hover:bg-gray-800 transition-colors"
+            >
+              Panier (0)
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative bg-black text-white overflow-hidden">
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-black via-gray-900 to-black opacity-90"
+      ></div>
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div class="text-center">
+          <div class="mb-6">
+            <span
+              class="inline-block bg-nike-orange text-white px-4 py-2 rounded-full text-sm font-bold tracking-wide"
+            >
+              NOUVELLE COLLECTION
+            </span>
+          </div>
+          <h1 class="text-6xl md:text-7xl font-black mb-6 tracking-tight">
+            JUST DO IT
+          </h1>
+          <p
+            class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto font-light"
+          >
+            Découvrez notre sélection exclusive de baskets Nike.<br />
+            Des classiques intemporels aux dernières innovations.
+          </p>
+          <div
+            class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8"
+          ></div>
+        </div>
+      </div>
+      <!-- Decorative elements -->
+      <div
+        class="absolute top-10 left-10 w-20 h-20 border-2 border-nike-orange rounded-full opacity-20"
+      ></div>
+      <div
+        class="absolute bottom-10 right-10 w-32 h-32 border-2 border-white rounded-full opacity-10"
+      ></div>
+    </section>
+
+    <!-- Filter Bar -->
+    <section class="bg-gray-50 py-6 border-b">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center space-x-6">
+            <h2 class="text-2xl font-bold text-nike-black">Baskets (3)</h2>
+            <div class="hidden md:flex space-x-4">
+              <button
+                class="text-sm font-medium text-gray-700 hover:text-nike-black border-b-2 border-transparent hover:border-nike-black pb-1 transition-all"
+              >
+                Tous
+              </button>
+              <button
+                class="text-sm font-medium text-gray-700 hover:text-nike-black border-b-2 border-transparent hover:border-nike-black pb-1 transition-all"
+              >
+                Lifestyle
+              </button>
+              <button
+                class="text-sm font-medium text-gray-700 hover:text-nike-black border-b-2 border-transparent hover:border-nike-black pb-1 transition-all"
+              >
+                Basketball
+              </button>
+            </div>
+          </div>
+          <div class="flex items-center space-x-4">
+            <select
+              class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-nike-orange focus:border-transparent"
+            >
+              <option>Trier par: Nouveautés</option>
+              <option>Prix: Croissant</option>
+              <option>Prix: Décroissant</option>
+              <option>Popularité</option>
+            </select>
+            <div class="flex border border-gray-300 rounded-lg overflow-hidden">
+              <button class="p-2 bg-nike-black text-white">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                  />
+                </svg>
+              </button>
+              <button class="p-2 bg-white text-gray-600 hover:bg-gray-50">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div id="loading" class="text-center py-20">
+          <div
+            class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-nike-orange"
+          ></div>
+          <p class="mt-6 text-lg text-gray-600 font-medium">
+            Chargement de la collection...
+          </p>
+        </div>
+
+        <div id="products" class="grid grid-cols-1 lg:grid-cols-3 gap-8 hidden">
+          <!-- Les produits seront chargés dynamiquement -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="text-center">
+            <div
+              class="w-16 h-16 bg-nike-black rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                />
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-nike-black mb-2">
+              Livraison Gratuite
+            </h3>
+            <p class="text-gray-600 text-sm">
+              Livraison gratuite pour toute commande supérieure à 50€
+            </p>
+          </div>
+          <div class="text-center">
+            <div
+              class="w-16 h-16 bg-nike-black rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-nike-black mb-2">
+              Retours 60 Jours
+            </h3>
+            <p class="text-gray-600 text-sm">
+              Retours gratuits sous 60 jours, sans condition
+            </p>
+          </div>
+          <div class="text-center">
+            <div
+              class="w-16 h-16 bg-nike-black rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-nike-black mb-2">Support 24/7</h3>
+            <p class="text-gray-600 text-sm">
+              Notre équipe est disponible 24h/24 pour vous aider
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-nike-black text-white py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div>
+            <h3 class="text-lg font-bold mb-4">NIKE</h3>
+            <p class="text-gray-400 text-sm">
+              Just Do It. Depuis 1971, Nike inspire les athlètes du monde
+              entier.
+            </p>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-4">Produits</h4>
+            <ul class="space-y-2 text-sm text-gray-400">
+              <li><a href="#" class="hover:text-white">Chaussures</a></li>
+              <li><a href="#" class="hover:text-white">Vêtements</a></li>
+              <li><a href="#" class="hover:text-white">Accessoires</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-4">Support</h4>
+            <ul class="space-y-2 text-sm text-gray-400">
+              <li><a href="#" class="hover:text-white">Aide</a></li>
+              <li><a href="#" class="hover:text-white">Retours</a></li>
+              <li><a href="#" class="hover:text-white">Livraison</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold mb-4">Entreprise</h4>
+            <ul class="space-y-2 text-sm text-gray-400">
+              <li><a href="#" class="hover:text-white">À propos</a></li>
+              <li><a href="#" class="hover:text-white">Carrières</a></li>
+              <li><a href="#" class="hover:text-white">Actualités</a></li>
+            </ul>
+          </div>
+        </div>
+        <div
+          class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400"
+        >
+          <p>
+            &copy; 2025 Nike, Inc. Tous droits réservés. | Demo S3 - Atelier
+            Éducatif
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Chargement des produits depuis l'API
+      async function loadProducts() {
+        const loading = document.getElementById("loading");
+        const container = document.getElementById("products");
+
+        try {
+          const response = await fetch("/api/products");
+          const products = await response.json();
+
+          container.innerHTML = products
+            .map(
+              (product) => `
+                <div class="group bg-white rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100">
+                  <!-- Image Container -->
+                  <div class="relative bg-gradient-to-br from-gray-50 to-gray-100 p-8 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-all duration-1000"></div>
+                    <img src="${product.image_url}" 
+                         alt="L'image du produit: ${
+                           product.name
+                         } a été supprimée du bucket" 
+                         class="w-full h-80 object-contain transform group-hover:scale-105 transition-transform duration-500"
+                         onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmM2Y0ZjYiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNlNWU3ZWIiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2cpIi8+PHRleHQgeD0iNTAlIiB5PSI0NSUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiM2YjcyODAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkltYWdlIFMzIGluZGlzcG9uaWJsZTwvdGV4dD48dGV4dCB4PSI1MCUiIHk9IjYwJSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiBmaWxsPSIjOWNhM2FmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4ke3Byb2R1Y3QuaW1hZ2V9PC90ZXh0Pjwvc3ZnPg==">
+                    
+                  
+                    <!-- Favorite Button -->
+                    <button class="absolute bottom-6 right-6 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 hover:bg-nike-black hover:text-white">
+                      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                      </svg>
+                    </button>
+                  </div>
+                  
+                  <!-- Content -->
+                  <div class="p-8">
+                    <div class="mb-4">
+                      <h3 class="text-2xl font-black text-nike-black mb-2 group-hover:text-nike-orange transition-colors duration-300">${
+                        product.name
+                      }</h3>
+                      <p class="text-gray-600 text-sm leading-relaxed">${
+                        product.description
+                      }</p>
+                    </div>
+                    
+                    <!-- Colors -->
+                    <div class="mb-6">
+                      <p class="text-xs font-semibold text-gray-700 mb-3 uppercase tracking-wide">Coloris</p>
+                      <div class="flex flex-wrap gap-2">
+                        ${product.colors
+                          .map(
+                            (color, index) => `
+                          <button class="group/color relative">
+                            <span class="block w-8 h-8 rounded-full border-2 border-gray-200 hover:border-nike-black transition-colors ${
+                              index === 0
+                                ? "bg-white"
+                                : index === 1
+                                ? "bg-black"
+                                : "bg-gray-300"
+                            }"></span>
+                            <span class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs text-gray-500 opacity-0 group-hover/color:opacity-100 transition-opacity whitespace-nowrap">${color}</span>
+                          </button>
+                        `
+                          )
+                          .join("")}
+                      </div>
+                    </div>
+                    
+                    <!-- Sizes -->
+                    <div class="mb-8">
+                      <div class="flex items-center justify-between mb-3">
+                        <p class="text-xs font-semibold text-gray-700 uppercase tracking-wide">Tailles</p>
+                        <button class="text-xs text-nike-orange hover:underline font-medium">Guide des tailles</button>
+                      </div>
+                      <div class="grid grid-cols-5 gap-2">
+                        ${product.sizes
+                          .slice(0, 10)
+                          .map(
+                            (size) => `
+                          <button class="aspect-square border border-gray-300 text-sm font-medium text-gray-700 hover:border-nike-black hover:bg-nike-black hover:text-white transition-all duration-200 rounded-lg flex items-center justify-center">${size}</button>
+                        `
+                          )
+                          .join("")}
+                      </div>
+                    </div>
+                    
+                    <!-- Price and CTA -->
+                    <div class="space-y-4">
+                      <div class="flex items-baseline justify-between">
+                        <div>
+                          <p class="text-3xl font-black text-nike-black">${
+                            product.price
+                          }€</p>
+                          <p class="text-xs text-gray-500">TVA incluse</p>
+                        </div>
+                        <div class="text-right">
+                          <div class="flex items-center text-green-600 text-sm font-medium mb-1">
+                            <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                            En stock
+                          </div>
+                          <p class="text-xs text-gray-500">Livraison gratuite</p>
+                        </div>
+                      </div>
+                      
+                      <div class="space-y-3">
+                        <button class="w-full bg-nike-black text-white py-4 rounded-full font-bold text-lg hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 active:scale-95">
+                          AJOUTER AU PANIER
+                        </button>
+                        <button class="w-full border-2 border-gray-300 text-gray-700 py-3 rounded-full font-semibold hover:border-nike-black hover:text-nike-black transition-all duration-300">
+                          Ajouter aux favoris
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `
+            )
+            .join("");
+
+          loading.classList.add("hidden");
+          container.classList.remove("hidden");
+          console.log("✅ Produits Nike chargés depuis S3");
+        } catch (error) {
+          console.error("❌ Erreur lors du chargement:", error);
+          loading.innerHTML =
+            '<div class="text-center text-red-500 py-8">❌ Erreur lors du chargement des produits</div>';
+        }
+      }
+
+      // Chargement au démarrage
+      document.addEventListener("DOMContentLoaded", loadProducts);
+    </script>
+  </body>
+</html>

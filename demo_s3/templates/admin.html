@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Administration S3 - Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 min-h-screen">
+    <div class="max-w-7xl mx-auto p-8">
+      <!-- Header -->
+      <header class="mb-8">
+        <div class="flex justify-between items-center">
+          <div>
+            <h1 class="text-3xl font-bold text-gray-800">Administration S3</h1>
+            <p class="text-gray-600 mt-2">
+              Gestion des images et configuration AWS
+            </p>
+          </div>
+          <a
+            href="/"
+            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+          >
+            ← Retour aux produits
+          </a>
+        </div>
+      </header>
+
+      <!-- Configuration S3 -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-xl font-semibold mb-4 flex items-center">
+          ⚙️ Configuration S3
+        </h2>
+        <div id="s3-config" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Chargé dynamiquement -->
+        </div>
+      </div>
+
+      <!-- Upload Section -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-xl font-semibold mb-4 flex items-center">
+          📤 Upload d'images
+        </h2>
+        <div
+          class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center"
+        >
+          <input
+            type="file"
+            id="fileInput"
+            accept="image/*"
+            class="hidden"
+            onchange="handleFileSelect(event)"
+          />
+          <div
+            id="dropZone"
+            class="cursor-pointer"
+            onclick="document.getElementById('fileInput').click()"
+          >
+            <div class="text-4xl mb-4">📁</div>
+            <p class="text-lg font-medium text-gray-700 mb-2">
+              Cliquez pour sélectionner une image
+            </p>
+            <p class="text-sm text-gray-500">PNG, JPG, JPEG jusqu'à 10MB</p>
+          </div>
+          <div id="uploadProgress" class="hidden mt-4">
+            <div class="bg-gray-200 rounded-full h-2">
+              <div
+                id="progressBar"
+                class="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                style="width: 0%"
+              ></div>
+            </div>
+            <p id="uploadStatus" class="text-sm text-gray-600 mt-2">
+              Upload en cours...
+            </p>
+          </div>
+        </div>
+        <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <h4 class="font-semibold text-yellow-800 mb-2">
+            ⚠️ Permissions requises :
+          </h4>
+          <ul class="text-sm text-yellow-700 space-y-1">
+            <li>
+              • <code class="bg-yellow-100 px-1 rounded">s3:PutObject</code> -
+              Pour uploader des fichiers
+            </li>
+            <li>
+              •
+              <code class="bg-yellow-100 px-1 rounded">s3:PutObjectAcl</code> -
+              Pour définir les permissions
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Images S3 -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-semibold flex items-center">
+            📦 Images dans le bucket S3
+          </h2>
+          <div class="flex space-x-2">
+            <button
+              onclick="refreshImages()"
+              class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors"
+            >
+              🔄 Actualiser
+            </button>
+            <button
+              onclick="testPermissions()"
+              class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+            >
+              🔍 Tester permissions
+            </button>
+          </div>
+        </div>
+
+        <div id="loading" class="text-center py-8 text-gray-500">
+          🔄 Chargement des images...
+        </div>
+
+        <div
+          id="images-grid"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 hidden"
+        >
+          <!-- Images chargées dynamiquement -->
+        </div>
+
+        <div id="error-message" class="text-center py-8 text-red-500 hidden">
+          <!-- Messages d'erreur -->
+        </div>
+      </div>
+
+      <!-- Permissions Info -->
+      <div class="bg-red-50 border border-red-200 rounded-lg p-6 mt-8">
+        <h3 class="text-lg font-semibold text-red-800 mb-3">
+          🔐 Gestion des permissions S3
+        </h3>
+        <div class="text-red-700 space-y-3">
+          <p>
+            Cette interface permet de tester l'impact des permissions S3 sur les
+            opérations :
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div class="bg-white rounded p-4">
+              <h4 class="font-semibold mb-2">📤 Upload (PUT)</h4>
+              <ul class="text-sm space-y-1">
+                <li>
+                  • <code class="bg-gray-100 px-1 rounded">s3:PutObject</code>
+                </li>
+                <li>
+                  •
+                  <code class="bg-gray-100 px-1 rounded">s3:PutObjectAcl</code>
+                </li>
+              </ul>
+            </div>
+            <div class="bg-white rounded p-4">
+              <h4 class="font-semibold mb-2">🗑️ Suppression (DELETE)</h4>
+              <ul class="text-sm space-y-1">
+                <li>
+                  •
+                  <code class="bg-gray-100 px-1 rounded">s3:DeleteObject</code>
+                </li>
+              </ul>
+            </div>
+            <div class="bg-white rounded p-4">
+              <h4 class="font-semibold mb-2">👁️ Lecture (GET)</h4>
+              <ul class="text-sm space-y-1">
+                <li>
+                  • <code class="bg-gray-100 px-1 rounded">s3:GetObject</code>
+                </li>
+                <li>
+                  • <code class="bg-gray-100 px-1 rounded">s3:ListBucket</code>
+                </li>
+              </ul>
+            </div>
+            <div class="bg-white rounded p-4">
+              <h4 class="font-semibold mb-2">📋 Listing</h4>
+              <ul class="text-sm space-y-1">
+                <li>
+                  • <code class="bg-gray-100 px-1 rounded">s3:ListBucket</code>
+                </li>
+                <li>
+                  •
+                  <code class="bg-gray-100 px-1 rounded"
+                    >s3:GetBucketLocation</code
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="bg-yellow-100 border border-yellow-300 rounded p-3 mt-4">
+            <p class="text-yellow-800 text-sm">
+              <strong>💡 Astuce :</strong> Retirez une permission dans votre
+              politique S3 et testez les opérations pour voir les erreurs !
+            </p>
+          </div>
+          <div class="bg-red-100 border border-red-300 rounded p-3 mt-3">
+            <p class="text-red-800 text-sm">
+              <strong>⚠️ Piège courant :</strong> Vérifiez qu'il n'y a pas
+              d'<strong>EXPLICIT DENY</strong> dans vos politiques ! Un seul
+              "Deny" explicite bloque toutes les permissions, même si vous avez
+              des "Allow".
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Instructions -->
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
+        <h3 class="text-lg font-semibold text-blue-800 mb-3">
+          📋 Instructions pour l'atelier
+        </h3>
+        <div class="text-blue-700 space-y-2">
+          <p>
+            <strong>1.</strong> Uploadez ces images Nike dans votre bucket S3 :
+          </p>
+          <div class="bg-white rounded p-3 mt-2 font-mono text-sm">
+            af1.png, aj4.png, muse.png
+          </div>
+          <p>
+            <strong>2.</strong> Testez les différentes opérations avec cette
+            interface
+          </p>
+          <p>
+            <strong>3.</strong> Modifiez les permissions S3 et observez les
+            erreurs
+          </p>
+          <p>
+            <strong>4.</strong> Les images représentent : Air Force 1, Air
+            Jordan 4, et Nike Muse
+          </p>
+          <p>
+            <strong>5.</strong> Utilisez le bouton "Tester permissions" pour
+            diagnostiquer les problèmes
+          </p>
+          <p>
+            <strong>6.</strong> ⚠️
+            <strong>Attention aux EXPLICIT DENY</strong> : ils bloquent tout,
+            même avec des "Allow" !
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Chargement de la configuration S3
+      async function loadS3Config() {
+        try {
+          const response = await fetch("/api/s3-config");
+          const config = await response.json();
+
+          document.getElementById("s3-config").innerHTML = `
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-gray-700 mb-2">Bucket S3</h3>
+                        <p class="text-gray-600 font-mono">${config.bucket_name}</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-gray-700 mb-2">Région AWS</h3>
+                        <p class="text-gray-600 font-mono">${config.region}</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg md:col-span-2">
+                        <h3 class="font-semibold text-gray-700 mb-2">URL de base</h3>
+                        <p class="text-gray-600 font-mono break-all">${config.base_url}</p>
+                    </div>
+                `;
+        } catch (error) {
+          console.error("Erreur lors du chargement de la config:", error);
+        }
+      }
+
+      // Chargement des images S3
+      async function loadImages() {
+        const loading = document.getElementById("loading");
+        const grid = document.getElementById("images-grid");
+        const errorDiv = document.getElementById("error-message");
+
+        loading.classList.remove("hidden");
+        grid.classList.add("hidden");
+        errorDiv.classList.add("hidden");
+
+        try {
+          const response = await fetch("/api/s3-images");
+          const images = await response.json();
+
+          if (response.ok) {
+            if (images.length === 0) {
+              errorDiv.innerHTML = "📭 Aucune image trouvée dans le bucket S3";
+              errorDiv.classList.remove("hidden");
+            } else {
+              grid.innerHTML = images
+                .map(
+                  (image) => `
+                            <div class="bg-gray-50 rounded-lg p-4 hover:shadow-md transition-shadow">
+                                <img src="${image.url}" 
+                                     alt="${image.name}" 
+                                     class="w-full h-32 object-cover rounded-lg mb-3"
+                                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEyOCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzZiNzI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+RXJyZXVyPC90ZXh0Pjwvc3ZnPg=='">
+                                <h4 class="font-semibold text-sm text-gray-800 mb-1">${
+                                  image.name
+                                }</h4>
+                                <p class="text-xs text-gray-500">${formatFileSize(
+                                  image.size
+                                )}</p>
+                                <p class="text-xs text-gray-500">${formatDate(
+                                  image.last_modified
+                                )}</p>
+                                <div class="flex justify-between items-center mt-3">
+                                    <a href="${
+                                      image.url
+                                    }" target="_blank" class="text-blue-500 hover:text-blue-600 text-xs">
+                                        🔗 Voir l'image
+                                    </a>
+                                    <button onclick="deleteImage('${
+                                      image.name
+                                    }')" 
+                                            class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs transition-colors">
+                                        🗑️ Supprimer
+                                    </button>
+                                </div>
+                                <div class="mt-2 text-xs">
+                                    <span class="inline-block bg-green-100 text-green-800 px-2 py-1 rounded mr-1">GET ✓</span>
+                                    <span id="delete-status-${image.name.replace(
+                                      /[^a-zA-Z0-9]/g,
+                                      ""
+                                    )}" class="inline-block bg-gray-100 text-gray-600 px-2 py-1 rounded">DELETE ?</span>
+                                </div>
+                            </div>
+                        `
+                )
+                .join("");
+              grid.classList.remove("hidden");
+            }
+          } else {
+            throw new Error(images.error || "Erreur inconnue");
+          }
+        } catch (error) {
+          console.error("Erreur lors du chargement des images:", error);
+          errorDiv.innerHTML = `❌ Erreur: ${error.message}`;
+          errorDiv.classList.remove("hidden");
+        } finally {
+          loading.classList.add("hidden");
+        }
+      }
+
+      // Actualiser les images
+      function refreshImages() {
+        loadImages();
+      }
+
+      // Formatage de la taille de fichier
+      function formatFileSize(bytes) {
+        if (bytes === 0) return "0 B";
+        const k = 1024;
+        const sizes = ["B", "KB", "MB", "GB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+      }
+
+      // Formatage de la date
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        return (
+          date.toLocaleDateString("fr-FR") +
+          " " +
+          date.toLocaleTimeString("fr-FR")
+        );
+      }
+
+      // Upload d'image
+      function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        if (file.size > 10 * 1024 * 1024) {
+          alert("Fichier trop volumineux (max 10MB)");
+          return;
+        }
+
+        uploadImage(file);
+      }
+
+      async function uploadImage(file) {
+        const progressDiv = document.getElementById("uploadProgress");
+        const progressBar = document.getElementById("progressBar");
+        const statusText = document.getElementById("uploadStatus");
+
+        progressDiv.classList.remove("hidden");
+        progressBar.style.width = "0%";
+        statusText.textContent = "Upload en cours...";
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+          const response = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            progressBar.style.width = "100%";
+            statusText.textContent = "✅ Upload réussi !";
+            setTimeout(() => {
+              progressDiv.classList.add("hidden");
+              loadImages();
+            }, 2000);
+          } else {
+            throw new Error(result.error || "Erreur d'upload");
+          }
+        } catch (error) {
+          console.error("Erreur upload:", error);
+          statusText.textContent = `❌ Erreur: ${error.message}`;
+          progressBar.style.width = "0%";
+          progressBar.classList.add("bg-red-500");
+        }
+      }
+
+      // Suppression d'image
+      async function deleteImage(imageName) {
+        if (!confirm(`Êtes-vous sûr de vouloir supprimer "${imageName}" ?`)) {
+          return;
+        }
+
+        const statusSpan = document.getElementById(
+          `delete-status-${imageName.replace(/[^a-zA-Z0-9]/g, "")}`
+        );
+        if (statusSpan) {
+          statusSpan.textContent = "DELETE...";
+          statusSpan.className =
+            "inline-block bg-yellow-100 text-yellow-800 px-2 py-1 rounded";
+        }
+
+        try {
+          const response = await fetch(
+            `/api/delete/${encodeURIComponent(imageName)}`,
+            {
+              method: "DELETE",
+            }
+          );
+
+          const result = await response.json();
+
+          if (response.ok) {
+            if (statusSpan) {
+              statusSpan.textContent = "DELETE ✓";
+              statusSpan.className =
+                "inline-block bg-green-100 text-green-800 px-2 py-1 rounded";
+            }
+            setTimeout(() => loadImages(), 1000);
+          } else {
+            throw new Error(result.error || "Erreur de suppression");
+          }
+        } catch (error) {
+          console.error("Erreur suppression:", error);
+          if (statusSpan) {
+            statusSpan.textContent = "DELETE ❌";
+            statusSpan.className =
+              "inline-block bg-red-100 text-red-800 px-2 py-1 rounded";
+          }
+
+          // Afficher l'erreur de permission
+          alert(
+            `❌ Suppression échouée: ${error.message}\n\n💡 Vérifiez que votre politique S3 inclut la permission "s3:DeleteObject"`
+          );
+        }
+      }
+
+      // Test des permissions
+      async function testPermissions() {
+        const results = [];
+
+        try {
+          // Test ListBucket
+          const listResponse = await fetch("/api/s3-images");
+          results.push({
+            operation: "ListBucket",
+            permission: "s3:ListBucket",
+            status: listResponse.ok ? "✅ OK" : "❌ ÉCHEC",
+            error: listResponse.ok ? null : await listResponse.text(),
+          });
+
+          // Test GetObject (on teste avec la première image)
+          const images = await listResponse.json();
+          if (images.length > 0) {
+            const getResponse = await fetch(images[0].url, { method: "HEAD" });
+            results.push({
+              operation: "GetObject",
+              permission: "s3:GetObject",
+              status: getResponse.ok ? "✅ OK" : "❌ ÉCHEC",
+              error: getResponse.ok ? null : getResponse.statusText,
+            });
+          }
+        } catch (error) {
+          results.push({
+            operation: "Test général",
+            permission: "Diverses",
+            status: "❌ ERREUR",
+            error: error.message,
+          });
+        }
+
+        // Afficher les résultats
+        const resultText = results
+          .map(
+            (r) =>
+              `${r.operation} (${r.permission}): ${r.status}${
+                r.error ? "\n  → " + r.error : ""
+              }`
+          )
+          .join("\n\n");
+
+        alert(
+          `🔍 Résultats du test de permissions:\n\n${resultText}\n\n💡 Pour tester DELETE et PUT, utilisez les boutons correspondants.`
+        );
+      }
+
+      // Upload d'image
+      function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        if (file.size > 10 * 1024 * 1024) {
+          alert("Fichier trop volumineux (max 10MB)");
+          return;
+        }
+
+        uploadImage(file);
+      }
+
+      async function uploadImage(file) {
+        const progressDiv = document.getElementById("uploadProgress");
+        const progressBar = document.getElementById("progressBar");
+        const statusText = document.getElementById("uploadStatus");
+
+        progressDiv.classList.remove("hidden");
+        progressBar.style.width = "0%";
+        statusText.textContent = "Upload en cours...";
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+          const response = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            progressBar.style.width = "100%";
+            statusText.textContent = "✅ Upload réussi !";
+            setTimeout(() => {
+              progressDiv.classList.add("hidden");
+              loadImages();
+            }, 2000);
+          } else {
+            throw new Error(result.error || "Erreur d'upload");
+          }
+        } catch (error) {
+          console.error("Erreur upload:", error);
+          statusText.textContent = `❌ Erreur: ${error.message}`;
+          progressBar.style.width = "0%";
+          progressBar.classList.add("bg-red-500");
+
+          // Afficher diagnostic détaillé pour les erreurs d'upload
+          if (
+            error.message.includes("Permission") ||
+            error.message.includes("Access")
+          ) {
+            setTimeout(() => {
+              alert(
+                `❌ Upload échoué: ${error.message}\n\n🔍 Diagnostic des permissions S3 :\n\n1️⃣ Vérifiez les permissions requises :\n   • s3:PutObject\n   • s3:PutObjectAcl\n\n2️⃣ Vérifiez qu'il n'y a pas d'EXPLICIT DENY dans :\n   • Politique du bucket\n   • Politique IAM de l'utilisateur\n   • Block Public Access settings\n\n💡 Les "Deny" explicites ont priorité sur tous les "Allow" !`
+              );
+            }, 2000);
+          }
+        }
+      }
+
+      // Suppression d'image
+      async function deleteImage(imageName) {
+        if (!confirm(`Êtes-vous sûr de vouloir supprimer "${imageName}" ?`)) {
+          return;
+        }
+
+        const statusSpan = document.getElementById(
+          `delete-status-${imageName.replace(/[^a-zA-Z0-9]/g, "")}`
+        );
+        if (statusSpan) {
+          statusSpan.textContent = "DELETE...";
+          statusSpan.className =
+            "inline-block bg-yellow-100 text-yellow-800 px-2 py-1 rounded";
+        }
+
+        try {
+          const response = await fetch(
+            `/api/delete/${encodeURIComponent(imageName)}`,
+            {
+              method: "DELETE",
+            }
+          );
+
+          const result = await response.json();
+
+          if (response.ok) {
+            if (statusSpan) {
+              statusSpan.textContent = "DELETE ✓";
+              statusSpan.className =
+                "inline-block bg-green-100 text-green-800 px-2 py-1 rounded";
+            }
+            setTimeout(() => loadImages(), 1000);
+          } else {
+            throw new Error(result.error || "Erreur de suppression");
+          }
+        } catch (error) {
+          console.error("Erreur suppression:", error);
+          if (statusSpan) {
+            statusSpan.textContent = "DELETE ❌";
+            statusSpan.className =
+              "inline-block bg-red-100 text-red-800 px-2 py-1 rounded";
+          }
+
+          // Afficher l'erreur de permission avec diagnostic complet
+          alert(
+            `❌ Suppression échouée: ${error.message}\n\n🔍 Diagnostic des permissions S3 :\n\n1️⃣ Vérifiez que votre politique S3 inclut "s3:DeleteObject"\n\n2️⃣ Vérifiez qu'il n'y a pas d'EXPLICIT DENY dans :\n   • Politique du bucket\n   • Politique IAM de l'utilisateur\n   • Politique de groupe IAM\n   • SCP (Service Control Policy)\n\n💡 Un seul "Deny" explicite bloque TOUTES les permissions !`
+          );
+        }
+      }
+
+      // Test des permissions
+      async function testPermissions() {
+        const results = [];
+
+        try {
+          // Test ListBucket
+          const listResponse = await fetch("/api/s3-images");
+          results.push({
+            operation: "ListBucket",
+            permission: "s3:ListBucket",
+            status: listResponse.ok ? "✅ OK" : "❌ ÉCHEC",
+            error: listResponse.ok ? null : await listResponse.text(),
+          });
+
+          // Test GetObject (on teste avec la première image)
+          const images = await listResponse.json();
+          if (images.length > 0) {
+            const getResponse = await fetch(images[0].url, { method: "HEAD" });
+            results.push({
+              operation: "GetObject",
+              permission: "s3:GetObject",
+              status: getResponse.ok ? "✅ OK" : "❌ ÉCHEC",
+              error: getResponse.ok ? null : getResponse.statusText,
+            });
+          }
+        } catch (error) {
+          results.push({
+            operation: "Test général",
+            permission: "Diverses",
+            status: "❌ ERREUR",
+            error: error.message,
+          });
+        }
+
+        // Afficher les résultats
+        const resultText = results
+          .map(
+            (r) =>
+              `${r.operation} (${r.permission}): ${r.status}${
+                r.error ? "\n  → " + r.error : ""
+              }`
+          )
+          .join("\n\n");
+
+        alert(
+          `🔍 Résultats du test de permissions:\n\n${resultText}\n\n💡 Pour tester DELETE et PUT, utilisez les boutons correspondants.\n\n⚠️ RAPPEL IMPORTANT :\nSi des opérations échouent malgré les bonnes permissions,\nvérifiez qu'il n'y a pas d'EXPLICIT DENY dans :\n• Politiques du bucket S3\n• Politiques IAM utilisateur/groupe\n• Service Control Policies (SCP)\n• Block Public Access settings\n\nUn seul "Deny" explicite annule tous les "Allow" !`
+        );
+      }
+
+      // Chargement initial
+      document.addEventListener("DOMContentLoaded", () => {
+        loadS3Config();
+        loadImages();
+      });
+    </script>
+  </body>
+</html>
