@@ -16,8 +16,6 @@ class S3Service:
         try:
             return boto3.client(
                 's3',
-                aws_access_key_id=self.config.aws_access_key_id,
-                aws_secret_access_key=self.config.aws_secret_access_key,
                 region_name=self.config.region_name
             )
         except NoCredentialsError:
@@ -63,7 +61,6 @@ class S3Service:
                 filename,
                 ExtraArgs={
                     'ContentType': file.content_type,
-                    'ACL': 'public-read'
                 }
             )
             

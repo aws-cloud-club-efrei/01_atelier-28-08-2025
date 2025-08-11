@@ -2,263 +2,222 @@
 
 > **Atelier Cloud Computing** - Démonstrations pratiques des services AWS  
 > **Date de création :** 9 janvier 2025  
-> **Dernière mise à jour :** 10 janvier 2025  
-> **Version :** 2.0.0
+> **Dernière mise à jour :** 11 août 2025  
+> **Version :** 3.0.0
 
-Repository contenant les démonstrations et exercices pratiques pour l'atelier AWS du Cloud Club EFREI. Cet atelier couvre l'intégration des services EC2 et S3 à travers une application web complète.
+Repository contenant les démonstrations et exercices pratiques pour l'atelier AWS du Cloud Club EFREI. Cet atelier couvre l'intégration complète des services EC2, S3 et Lambda à travers une application web moderne avec traitement automatisé.
 
 ## 🎯 Objectif de l'atelier
 
 Apprendre à déployer une application web moderne sur AWS en utilisant :
 
-- **Amazon EC2** pour l'hébergement de l'application
-- **Amazon S3** pour le stockage des ressources statiques
-- **Intégration complète** entre les services AWS
+- **Amazon S3** pour le stockage des images et ressources statiques
+- **AWS Lambda** pour le traitement serverless automatique
+- **Amazon EC2** pour l'hébergement de l'application en production
+- **CloudWatch** pour le monitoring et les logs
+- **Intégration complète** entre tous les services AWS
 
 ## 📁 Structure du projet
 
 ```
-01_atelier-09-07-2025/
-├── 📄 README.md              # Documentation principale
-├── 📁 demo_s3/               # Application Nike Store (Flask + S3)
-│   ├── 🐍 app.py             # Application Flask modulaire
-│   ├── ⚙️ config.py          # Configuration centralisée
-│   ├── 📋 requirements.txt   # Dépendances Python
-│   ├── 🌐 templates/         # Templates HTML (Nike Store)
-│   ├── 🔧 services/          # Services métier (S3, produits)
-│   ├── 🛣️ routes/            # Routes Flask (API + vues)
-│   ├── 🛠️ utils/             # Utilitaires et validateurs
-│   └── 📖 README.md          # Documentation de l'application
-├── 📁 demo_ec2/              # Scripts de déploiement EC2
-│   ├── 🔧 01-configure-instance.sh  # Configuration interactive
-│   ├── 📦 02-deploy-app.sh          # Déploiement automatisé
-│   ├── 🛠️ 03-manage-instance.sh     # Gestion de l'application
-│   └── 📖 README.md                 # Guide de déploiement
-└── 📁 demo_lambda/           # Démonstrations Lambda (à venir)
+atelier-aws-cloud-club-efrei/
+├── 📄 README.md                       # Documentation principale
+├── 📄 .gitignore                      # Fichiers à ignorer par Git
+├── 📁 diagrams/                       # Diagrammes d'architecture
+│   ├── aws-architecture.mermaid       # Architecture AWS Mermaid
+│   ├── aws-architecture.png           # Architecture AWS (image)
+│   ├── sequence-diagram.mermaid       # Diagramme de séquence
+│   └── sequence.png                   # Diagramme de séquence (image)
+├── 📁 01_demo_s3/                     # Application Nike Store (Flask + S3)
+│   ├── 🐍 app.py                      # Application Flask modulaire
+│   ├── ⚙️ config.py                   # Configuration centralisée
+│   ├── 📋 requirements.txt            # Dépendances Python
+│   ├── 🔒 .env                        # Variables d'environnement
+│   ├── 🌐 templates/                  # Templates HTML (Nike Store)
+│   │   ├── index.html                 # Page d'accueil Nike Store
+│   │   └── admin.html                 # Interface d'administration S3
+│   ├── � servic.es/                   # Services métier (S3, produits)
+│   │   ├── __init__.py
+│   │   ├── s3_service.py              # Service AWS S3
+│   │   └── product_service.py         # Service produits Nike
+│   ├── 🛣️ routes/                     # Routes Flask (API + vues)
+│   │   ├── __init__.py
+│   │   ├── main_routes.py             # Routes principales
+│   │   └── api_routes.py              # API REST
+│   ├── �️R utils/                      # Utilitaires et validateurs
+│   │   ├── __init__.py
+│   │   └── validators.py              # Validation des données
+│   └── 📖 README.md                   # Documentation de l'application
+├── 📁 02_demo_lambda/                 # Traitement automatique serverless
+│   ├── ⚡ lambda_function.py          # Fonction Lambda de traitement
+│   └── 📖 README.md                   # Guide Lambda + intégration S3
+└── 📁 03_demo_ec2/                    # Scripts de déploiement EC2
+    ├── 🔧 01-create-ec2.sh            # Création d'instance
+    ├── 📦 02-deploy-app.sh            # Déploiement automatisé
+    ├── 🛠️ 03-manage-instance.sh       # Gestion de l'application
+    └── 📖 README.md                   # Guide de déploiement
 ```
 
-## 🏪 Demo S3 - Nike Store Application
+# 🚀 Démonstrations AWS - E-commerce Nike Store
 
-### 📋 Description
+Ce projet contient trois démonstrations pratiques d'utilisation des services AWS pour créer une application e-commerce complète avec traitement automatisé.
 
-Application web moderne simulant un site e-commerce Nike avec :
+## 📁 Structure du projet
 
-- **Interface utilisateur** : Design Nike authentique avec TailwindCSS
-- **Catalogue produits** : 3 baskets iconiques (Air Force 1, Air Jordan 4, Nike Muse)
-- **Intégration S3** : Images stockées et servies depuis Amazon S3
-- **Interface d'administration** : Gestion des images S3 avec upload/suppression
-- **Architecture modulaire** : Code Python organisé en services et routes
+### 🛍️ `demo_s3/` - Application Nike Store avec S3
 
-### 🚀 Fonctionnalités
+Application web Flask complète simulant un site e-commerce Nike avec intégration S3 pour la gestion des images.
 
-- ✅ **Affichage dynamique** des produits avec images S3
-- ✅ **Interface d'administration** pour gérer les images
-- ✅ **Upload/Suppression** d'images vers/depuis S3
-- ✅ **Gestion d'erreurs** avec diagnostic des permissions
-- ✅ **Design responsive** optimisé mobile/desktop
-- ✅ **API REST** pour l'intégration
+**Fonctionnalités :**
 
-### 🛠️ Technologies utilisées
+- Interface utilisateur Nike Store
+- Upload d'images de sneakers vers S3
+- Interface d'administration S3
+- Gestion des erreurs et permissions S3
 
-- **Backend** : Python 3.9+, Flask 2.3+
-- **AWS SDK** : Boto3 pour l'intégration S3
-- **Frontend** : HTML5, TailwindCSS, JavaScript ES6
-- **Configuration** : python-dotenv pour les variables d'environnement
+**Technologies :** Python Flask, AWS S3, HTML/CSS/JavaScript, Boto3
 
-## 🖥️ Demo EC2 - Déploiement automatisé
+### ⚡ `demo_lambda/` - Traitement automatique d'images
 
-### 📋 Description
+Fonction Lambda serverless qui complète l'application Nike Store en ajoutant un traitement automatique des images uploadées.
 
-Scripts Bash pour automatiser le déploiement de l'application Nike Store sur une instance EC2 :
+**Fonctionnalités :**
 
-- **Configuration interactive** des informations d'instance
-- **Déploiement automatisé** avec gestion des dépendances
-- **Gestion complète** de l'application en production
+- Déclenchement automatique sur événements S3
+- Création de copies horodatées dans le dossier `analyse/`
+- Format de nommage (YYYY-MM-DD_HHhMMmSSs)
+- Conservation de l'image originale
+- Logs CloudWatch
 
-### 🚀 Fonctionnalités
+**Technologies :** Python, AWS Lambda, CloudWatch
 
-- ✅ **Configuration guidée** des paramètres d'instance
-- ✅ **Déploiement en un clic** avec vérifications automatiques
-- ✅ **Gestion d'application** (start, stop, restart, logs)
-- ✅ **Diagnostic système** et monitoring
-- ✅ **Support multi-OS** (Amazon Linux, Ubuntu)
-- ✅ **Sécurisation SSH** et gestion des permissions
+### �️ `demo_ec2/` - Déploiement EC2 automatisé
 
-### 🛠️ Technologies utilisées
+Scripts Bash pour déployer automatiquement l'application Nike Store sur une instance EC2.
 
-- **Scripts** : Bash 4.0+
-- **Déploiement** : SSH, SCP
-- **Monitoring** : Logs système et application
-- **Packaging** : ZIP pour le transfert d'application
+**Fonctionnalités :**
 
-## 🎓 Parcours d'apprentissage
+- Configuration et déploiement de l'application sur l'instance EC2 aupréalablement créée via la console AWS
+- Gestion des clés SSH et sécurité
+- Scripts de diagnostic et maintenance
 
-### Étape 1 : Développement local (demo_s3)
+**Technologies :** Bash, AWS EC2, Ubuntu Server, SSH
+
+## 🏗️ Architecture globale
+
+```
+👤 Utilisateur
+    ↓ (Upload image)
+🌐 Application Nike Store (Flask - Port 3000)
+    ↓ (Stockage)
+🪣 S3 Bucket (e-commerce-bucket-acc-efrei)
+    ↓ (ObjectCreated Event)
+⚡ Lambda Function (e-commerce-lambda-function-acc-efrei)
+    ↓ (Copie horodatée)
+📁 analyse/ (Images avec timestamp)
+    ↓ (Logs)
+📊 CloudWatch (Monitoring)
+    ↓ (Déploiement production)
+🖥️ EC2 Instance (Production)
+```
+
+## 🔄 Flux de données complet
+
+1. **Upload** : Utilisateur upload une image via l'interface Nike Store
+2. **Stockage** : Image sauvegardée dans le bucket S3
+3. **Déclenchement** : Événement S3 déclenche automatiquement la Lambda
+4. **Traitement** : Lambda crée une copie horodatée dans `analyse/`
+
+## 🚀 Démarrage rapide
+
+### Prérequis
+
+- Compte AWS configuré
+- Python 3.9+
+- AWS CLI installé et configuré
+- Bash (pour les scripts EC2)
+
+### 1. Demo S3 - Application Nike Store
 
 ```bash
 cd demo_s3
 pip install -r requirements.txt
-# Configurer le .env avec vos clés AWS
 python app.py
-# Accéder à http://localhost:3000
+# Ouvrir http://127.0.0.1:3000
 ```
 
-### Étape 2 : Déploiement sur EC2 (demo_ec2)
+### 2. Demo Lambda - Traitement automatique (Suite de demo_s3)
+
+```bash
+cd demo_lambda
+# 1. Créer la fonction Lambda via AWS Console
+# 2. Nom : e-commerce-lambda-function-acc-efrei
+# 3. Copier-coller le code de lambda_function.py
+# 4. Configurer le trigger S3 sur le bucket
+# 5. Tester en uploadant une image via l'app Nike Store
+```
+
+### 3. Demo EC2 - Déploiement production
 
 ```bash
 cd demo_ec2
 chmod +x *.sh
-./01-configure-instance.sh  # Configuration
-./02-deploy-app.sh          # Déploiement
-./03-manage-instance.sh     # Gestion
-```
-
-### Étape 3 : Configuration S3
-
-1. **Créer un bucket S3** : `e-commerce-bucket-acc-efrei`
-2. **Uploader les images** : `af1.png`, `aj4.png`, `muse.png`
-3. **Configurer les permissions** S3 appropriées
-4. **Tester l'intégration** via l'interface d'administration
-
-## 📚 Concepts AWS abordés
-
-### 🖥️ Amazon EC2
-
-- **Instances** : Création, configuration, gestion
-- **Groupes de sécurité** : Règles de pare-feu
-- **Clés SSH** : Authentification sécurisée
-- **Déploiement d'applications** : Bonnes pratiques
-
-### 📦 Amazon S3
-
-- **Buckets** : Création et configuration
-- **Objets** : Upload, téléchargement, suppression
-- **Permissions** : Politiques IAM et bucket policies
-- **Intégration applicative** : SDK Boto3
-
-### � Sécurité AWS
-
-- **Variables d'environnement** : Gestion sécurisée des clés
-- **Permissions granulaires** : Principe du moindre privilège
-- **Diagnostic d'erreurs** : Explicit Deny vs Allow
-
-## 🛠️ Prérequis techniques
-
-### 💻 Environnement de développement
-
-- **Python** 3.9+ avec pip
-- **Git** pour le versioning
-- **Éditeur de code** (VS Code recommandé)
-- **Terminal** Unix/Linux (WSL2 sur Windows)
-
-### ☁️ Compte AWS
-
-- **Compte AWS** actif (Free Tier suffisant)
-- **Clés d'accès** IAM configurées
-- **Permissions** EC2 et S3 requises
-
-### 🔧 Outils système
-
-- **SSH client** pour la connexion aux instances
-- **curl** pour les tests HTTP
-- **zip/unzip** pour le packaging
-
-## 🚀 Démarrage rapide
-
-### 1. Clone du repository
-
-```bash
-git clone <repository-url>
-cd 01_atelier-09-07-2025
-```
-
-### 2. Test en local
-
-```bash
-cd demo_s3
-pip install -r requirements.txt
-cp .env.example .env
-# Éditer .env avec vos clés AWS
-python app.py
-```
-
-### 3. Déploiement sur EC2
-
-```bash
-# Créer une instance EC2 via la console AWS
-cd ../demo_ec2
-./01-configure-instance.sh
+./01-create-ec2.sh
 ./02-deploy-app.sh
 ```
 
-## 💡 Bonnes pratiques démontrées
+## 📊 Diagrammes d'architecture
 
-### 🏗️ Architecture
+Le projet inclut plusieurs diagrammes pour visualiser l'architecture :
 
-- **Séparation des responsabilités** : Services, routes, utilitaires
-- **Configuration externalisée** : Variables d'environnement
-- **Gestion d'erreurs** : Logging et diagnostic
+- `aws-architecture.mermaid` - Architecture AWS avec icônes des services
+- `sequence-diagram.mermaid` - Flux temporel des 3 démonstrations
 
-### 🔒 Sécurité
+## 🔧 Configuration AWS
 
-- **Clés AWS** : Jamais dans le code source
-- **Permissions SSH** : Clés avec permissions 400
-- **Groupes de sécurité** : Ports minimaux ouverts
+### Services utilisés
 
-### 📊 Monitoring
+- **S3** : Stockage d'images et fichiers statiques
+- **Lambda** : Traitement serverless automatique des images
+- **EC2** : Hébergement de l'application en production
+- **CloudWatch** : Monitoring et logs détaillés
+- **IAM** : Gestion automatique des permissions
 
-- **Logs applicatifs** : Suivi des opérations
-- **Métriques système** : CPU, RAM, disque
-- **Tests de connectivité** : Vérifications automatiques
+### Bucket S3 configuré
 
-## 💰 Estimation des coûts
+```
+e-commerce-bucket-acc-efrei/
+├── nocta.png                           ← Images originales
+├── af1.jpg
+└── analyse/                            ← Copies horodatées par Lambda
+    ├── nocta_2025-08-11_18h30m45s.png
+    └── af1_2025-08-11_18h45m12s.jpg
+```
 
-### 🆓 Free Tier (12 premiers mois)
+## 📝 Documentation détaillée
 
-- **EC2 t2.micro** : 750h/mois gratuit
-- **S3** : 5 GB gratuit
-- **Transfert** : 15 GB sortant gratuit
+Chaque démonstration contient sa propre documentation :
 
-### 💳 Coût estimé pour l'atelier
+- `demo_s3/README.md` - Guide complet de l'application Nike Store
+- `demo_lambda/README.md` - Configuration Lambda et test avec demo_s3
+- `demo_ec2/README.md` - Scripts de déploiement EC2
 
-- **Durée** : 4 heures
-- **Instance EC2** : ~0.05€
-- **Stockage S3** : ~0.01€
-- **Total** : **~0.06€**
+## 🧪 Tests et validation
 
-## 📞 Support et ressources
+### Workflow de test complet
 
-### 🔗 Documentation officielle
+1. **Lancer l'application Nike Store** (demo_s3)
+2. **Uploader une image** via l'interface web
+3. **Vérifier le déclenchement Lambda** dans CloudWatch
+4. **Contrôler la création** du dossier `analyse/` dans S3
+5. **Valider le format** de nommage horodaté
+6. **Déployer l'application sur EC2** en production
+7. **Refaire les memes manipulations mais via l'URL public de l'instance EC2** pour vérifier que ça marche en production
 
-- [AWS EC2 Documentation](https://docs.aws.amazon.com/ec2/)
-- [AWS S3 Documentation](https://docs.aws.amazon.com/s3/)
-- [Flask Documentation](https://flask.palletsprojects.com/)
-- [Boto3 Documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/)
+## 👥 Auteur
 
-### 👥 Contact
+- **Amine MOUHOUN, AWS Cloud Captain @ EFREI**
 
-- **Organisateur** : Cloud Club EFREI
-- **Support technique** : Via les issues GitHub
-- **Documentation** : README.md dans chaque dossier
+## 📢 Support & Questions
 
-## ⚠️ Notes importantes
-
-### 🔐 Sécurité
-
-- **Ne jamais commiter** vos clés AWS dans Git
-- **Utiliser des variables d'environnement** pour la configuration
-- **Arrêter les instances EC2** après l'atelier
-
-### 💸 Gestion des coûts
-
-- **Surveiller** votre usage AWS
-- **Supprimer les ressources** après l'atelier
-- **Utiliser AWS Cost Explorer** pour le monitoring
-
----
-
-🎓 **Bon atelier et bonne découverte d'AWS !**
-
----
-
-_Dernière mise à jour : 10 janvier 2025 - Version 2.0.0_
+Pour toute question ou problème ➡️ [Rejoins-nous sur Discord](https://discord.gg/METtWWV2DC)

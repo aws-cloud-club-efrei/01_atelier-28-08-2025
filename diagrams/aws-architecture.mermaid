@@ -1,0 +1,70 @@
+graph TB
+    %% User and Client
+    User[👤 Utilisateur]
+    Browser[🌐 Navigateur Web]
+    
+    %% Demo S3 - Nike Store Application
+    subgraph "Demo S3 - Application Nike Store"
+        Flask[🐍 Flask App<br/>Nike Store<br/>Port 3000]
+        S3[(🪣 S3 Bucket<br/>e-commerce-bucket-acc-efrei)]
+    end
+    
+    %% Demo Lambda - Serverless Processing
+    subgraph "Demo Lambda - Traitement Serverless"
+        Lambda[⚡ AWS Lambda<br/>nike-store-processor<br/>Python 3.9]
+        CloudWatch[📊 CloudWatch Logs<br/>Monitoring & Debugging]
+        AnalyseFolder[📁 analyse/<br/>Images horodatées]
+    end
+    
+    %% Demo EC2 - Production Deployment
+    subgraph "Demo EC2 - Déploiement Production"
+        EC2[🖥️ EC2 Instance<br/>Ubuntu Server<br/>t2.micro]
+        SecurityGroup[🔒 Security Group<br/>HTTP/SSH Access]
+        KeyPair[🔑 Key Pair<br/>ec2-e-commerce-key2.pem]
+    end
+    
+    %% AWS Services
+    subgraph "Services AWS"
+        IAM[👥 IAM Roles<br/>Permissions Management]
+        VPC[🌐 VPC<br/>Virtual Private Cloud]
+        Route53[🌍 Route 53<br/>DNS Management]
+    end
+    
+    %% Connections and Flow
+    User --> Browser
+    Browser --> Flask
+    Flask --> S3
+    
+    %% S3 Event Trigger
+    S3 -.->|ObjectCreated Event| Lambda
+    Lambda --> AnalyseFolder
+    Lambda --> CloudWatch
+    AnalyseFolder --> S3
+    
+    %% EC2 Deployment
+    Flask -.->|Deploy to Production| EC2
+    EC2 --> SecurityGroup
+    EC2 --> KeyPair
+    EC2 --> S3
+    
+    %% AWS Infrastructure
+    Lambda --> IAM
+    EC2 --> IAM
+    S3 --> IAM
+    EC2 --> VPC
+    EC2 -.-> Route53
+    
+    %% Styling
+    classDef userClass fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef flaskClass fill:#c8e6c9,stroke:#2e7d32,stroke-width:2px
+    classDef awsClass fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    classDef lambdaClass fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef ec2Class fill:#ffebee,stroke:#c62828,stroke-width:2px
+    classDef serviceClass fill:#f5f5f5,stroke:#616161,stroke-width:2px
+    
+    class User,Browser userClass
+    class Flask flaskClass
+    class S3,AnalyseFolder awsClass
+    class Lambda,CloudWatch lambdaClass
+    class EC2,SecurityGroup,KeyPair ec2Class
+    class IAM,VPC,Route53 serviceClass
