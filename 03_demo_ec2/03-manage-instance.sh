@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Script de gestion de l'instance EC2 Demo S3
-# Auteur: Atelier Cloud Club EFREI
 
 # Vérifier que le fichier de configuration existe
 if [ ! -f "instance-config.txt" ]; then

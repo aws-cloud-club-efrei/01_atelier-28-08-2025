@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Script pour déployer l'application Demo S3 sur l'instance EC2
-# Auteur: Atelier Cloud Club EFREI
 
 set -e  # Arrêter le script en cas d'erreur
 
@@ -10,14 +9,14 @@ echo "📅 Date: $(date)"
 echo ""
 
 # Vérifier que le fichier de configuration existe
-if [ ! -f "instance-config.txt" ]; then
+if [ ! -f "./instance-config.txt" ]; then
     echo "❌ Fichier 'instance-config.txt' non trouvé."
     echo "💡 Exécutez d'abord './01-configure-instance.sh'"
     exit 1
 fi
 
 # Charger les informations de l'instance
-source instance-config.txt
+source "instance-config.txt"
 
 echo "📋 Configuration de l'instance:"
 echo "   🌐 IP Publique: $PUBLIC_IP"
@@ -45,13 +44,13 @@ find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
 find . -name "*.pyc" -delete 2>/dev/null || true
 find . -name ".pytest_cache" -type d -exec rm -rf {} + 2>/dev/null || true
 
-# Créer le fichier ZIP
+# Créer l'archive TAR
 echo "📁 Création de l'archive..."
-zip -r ../demo_ec2/demo-s3-app.zip . -x "*.git*" "node_modules/*" "*.log" "*.tmp" "__pycache__/*" "*.pyc"
+tar --exclude="*.git*" --exclude="node_modules/*" --exclude="*.log" --exclude="*.tmp" --exclude="__pycache__" --exclude="*.pyc" -czf ../demo_ec2/demo-s3-app.tar.gz .
 
 cd ../demo_ec2
 
-echo "✅ Package créé: demo-s3-app.zip ($(du -h demo-s3-app.zip | cut -f1))"
+echo "✅ Package créé: demo-s3-app.tar.gz ($(du -h demo-s3-app.tar.gz | cut -f1))"
 echo ""
 
 # Fonction pour exécuter des commandes SSH
@@ -109,12 +108,12 @@ if command -v yum &> /dev/null; then
     # Amazon Linux / CentOS / RHEL
     echo '📦 Installation sur système basé sur RHEL/Amazon Linux...'
     sudo yum update -y
-    sudo yum install -y python3 python3-pip unzip
+    sudo yum install -y python3 python3-pip tar
 elif command -v apt &> /dev/null; then
     # Ubuntu / Debian
     echo '📦 Installation sur système basé sur Debian/Ubuntu...'
     sudo apt update
-    sudo apt install -y python3 python3-pip unzip
+    sudo apt install -y python3 python3-pip tar
 else
     echo '⚠️ Système non reconnu, tentative d installation manuelle...'
 fi
@@ -128,7 +127,7 @@ echo '✅ Dépendances installées'
 
 # Copier l'application sur l'instance
 echo "📤 Upload de l'application sur l'instance..."
-scp_copy "demo-s3-app.zip" "/tmp/"
+scp_copy "demo-s3-app.tar.gz" "/tmp/"
 echo "✅ Application uploadée"
 echo ""
 
@@ -142,15 +141,13 @@ sudo chown $SSH_USER:$SSH_USER /opt/demo-s3
 
 echo '📦 Extraction de l application...'
 cd /opt/demo-s3
-unzip -o /tmp/demo-s3-app.zip
+tar -xzf /tmp/demo-s3-app.tar.gz
 echo '✅ Application extraite'
 
 echo ''
 echo '⚙️ Configuration de l environnement...'
 # Créer un fichier .env d'exemple
 cat > /opt/demo-s3/.env << 'ENV_EOF'
-AWS_ACCESS_KEY_ID=REMPLACER_PAR_VOTRE_ACCESS_KEY
-AWS_SECRET_ACCESS_KEY=REMPLACER_PAR_VOTRE_SECRET_KEY
 AWS_REGION=eu-west-3
 S3_BUCKET_NAME=e-commerce-bucket-acc-efrei
 ENV_EOF
@@ -168,54 +165,57 @@ echo '🎯 Démarrage de l application en arrière-plan...'
 pkill -f 'python3 app.py' || true
 sleep 2
 
+# Vérifier que nous sommes dans le bon répertoire
+pwd
+ls -la
+
+# Tester l'application en mode debug d'abord
+echo 'Test de l application...'
+python3 -c \"
+try:
+    import sys
+    sys.path.insert(0, '/opt/demo-s3')
+    from app import create_app
+    app = create_app()
+    print('✅ Application peut être importée')
+except Exception as e:
+    print(f'❌ Erreur d import: {e}')
+    import traceback
+    traceback.print_exc()
+\"
+
 # Démarrer l'application en arrière-plan
+echo 'Démarrage de l application...'
 nohup python3 app.py > app.log 2>&1 &
 APP_PID=\$!
 echo \"Application démarrée avec PID: \$APP_PID\"
 
 # Attendre un peu et vérifier si l'application démarre
-sleep 5
+sleep 10
 if ps -p \$APP_PID > /dev/null; then
     echo '✅ Application démarrée avec succès'
     echo \"PID: \$APP_PID\" > app.pid
+    
+    # Vérifier que l'application écoute sur le port 3000
+    echo 'Vérification du port 3000...'
+    if netstat -tlnp 2>/dev/null | grep :3000 || ss -tlnp 2>/dev/null | grep :3000; then
+        echo '✅ Application écoute sur le port 3000'
+    else
+        echo '⚠️ Application ne semble pas écouter sur le port 3000'
+    fi
+    
+    # Test local
+    echo 'Test de connectivité locale...'
+    curl -s http://localhost:3000 > /dev/null && echo '✅ Application répond localement' || echo '⚠️ Application ne répond pas localement'
 else
     echo '❌ Erreur lors du démarrage de l application'
-    echo 'Logs:'
+    echo 'Logs d erreur:'
     tail -20 app.log
+    echo ''
+    echo 'Tentative de démarrage en mode debug:'
+    python3 app.py
 fi
 "
 
 echo ""
-echo "🌐 Test de l'application..."
-sleep 10
-
-# Tester l'accès à l'application
-echo "🔍 Vérification de l'accessibilité..."
-if curl -s --connect-timeout 10 http://$PUBLIC_IP:3000 > /dev/null; then
-    echo "✅ Application accessible sur http://$PUBLIC_IP:3000"
-else
-    echo "⚠️ Application pas encore accessible"
-    echo "💡 Vérifiez que le port 3000 est ouvert dans le groupe de sécurité"
-fi
-
-echo ""
-echo "🎉 === DÉPLOIEMENT TERMINÉ ==="
-echo ""
-echo "🔗 URLs d'accès:"
-echo "   📱 Application principale: http://$PUBLIC_IP:3000"
-echo "   ⚙️ Interface d'administration: http://$PUBLIC_IP:3000/admin"
-echo ""
-echo "🔧 Commandes utiles:"
-echo "   📡 SSH: ssh -i $KEY_FILE $SSH_USER@$PUBLIC_IP"
-echo "   📊 Voir les logs: tail -f /opt/demo-s3/app.log"
-echo "   🔄 Redémarrer l'app: pkill -f 'python3 app.py' && cd /opt/demo-s3 && nohup python3 app.py > app.log 2>&1 &"
-echo ""
-echo "⚠️ CONFIGURATION REQUISE:"
-echo "   1. 🔑 Éditez /opt/demo-s3/.env avec vos vraies clés AWS"
-echo "   2. 📦 Uploadez les images dans votre bucket S3:"
-echo "      - af1.png (Air Force 1)"
-echo "      - aj4.png (Air Jordan 4)"
-echo "      - muse.png (Nike Muse)"
-echo "   3. 🛡️ Vérifiez que le port 3000 est ouvert dans le groupe de sécurité"
-echo ""
-echo "🎓 Votre application Demo S3 est maintenant déployée sur EC2 !"
+echo "🌐 Fin du déploiement, application accessible sur http://$PUBLIC_IP:3000"

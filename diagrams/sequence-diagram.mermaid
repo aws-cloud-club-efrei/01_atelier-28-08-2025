@@ -1,0 +1,53 @@
+sequenceDiagram
+    participant User as 👤 Utilisateur
+    participant Web as 🌐 Nike Store App
+    participant S3 as 📦 S3 Bucket
+    participant Lambda as ⚡ Lambda Function
+    participant CW as 📊 CloudWatch
+    participant EC2 as 🖥️ EC2 Instance
+
+    Note over User, EC2: Démonstration complète AWS - Nike Store
+
+    %% Demo S3 Flow
+    rect rgb(232, 244, 253)
+        Note over User, S3: DEMO S3 - Application Nike Store
+        User->>Web: 1. Accède à http://127.0.0.1:3000
+        Web->>User: 2. Affiche interface Nike Store
+        User->>Web: 3. Sélectionne image (nocta.png)
+        Web->>S3: 4. Upload image vers bucket
+        S3->>Web: 5. Confirmation upload
+        Web->>User: 6. Message de succès
+    end
+
+    %% Demo Lambda Flow
+    rect rgb(243, 229, 245)
+        Note over S3, CW: DEMO LAMBDA - Traitement automatique
+        S3->>Lambda: 7. Trigger ObjectCreated event
+        Lambda->>Lambda: 8. Détecte nouvelle image
+        Lambda->>S3: 9. Lit image originale
+        Lambda->>Lambda: 10. Génère timestamp (2025-08-11_18h30m45s)
+        Lambda->>S3: 11. Crée copie dans analyse/
+        Lambda->>CW: 12. Log succès du traitement
+        Note over Lambda: Image copiée: analyse/nocta_2025-08-11_18h30m45s.png
+    end
+
+    %% Demo EC2 Flow
+    rect rgb(255, 243, 224)
+        Note over User, EC2: DEMO EC2 - Déploiement production
+        User->>EC2: 13. Exécute 01-create-ec2.sh
+        EC2->>User: 14. Instance créée
+        User->>EC2: 15. Exécute 02-deploy-app.sh
+        EC2->>S3: 16. Configure accès au bucket
+        EC2->>EC2: 17. Installe Flask app
+        EC2->>User: 18. App déployée sur EC2
+        User->>EC2: 19. Accède à l'app via IP public
+        EC2->>User: 20. Nike Store accessible en production
+    end
+
+    %% Monitoring
+    rect rgb(250, 250, 250)
+        Note over CW, User: Surveillance et monitoring
+        CW->>User: 21. Logs Lambda disponibles
+        S3->>User: 22. Dossier analyse/ visible
+        EC2->>User: 23. App production fonctionnelle
+    end
